@@ -36,8 +36,13 @@ jobs:
               run: |
                echo "MONGO_URI=mongodb://${{ secrets.MONGO_USER }}:${{ secrets.MONGO_PASS }}@localhost:27017/" >> .env
 
-            - name: Verify app start
-              run: node src/index.js &
-                sleep 5
+            - name: Validate Node syntax
+              run: node --check src/index.js
+
+            - name: Start server (smoke test)
+              run: |
+                    node src/index.js &
+                    sleep 5
+                    pkill node
                 
               
