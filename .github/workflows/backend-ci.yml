@@ -18,8 +18,8 @@ jobs:
                 ports:
                     - 27017:27017
                 env:
-                    MONGO_INITDB_ROOT_USERNAME: admin123
-                    MONGO_INITDB_ROOT_PASSWORD: adminpass123
+                    MONGO_INITDB_ROOT_USERNAME: ${{ secrets.MONGO_USER }}
+                    MONGO_INITDB_ROOT_PASSWORD: ${{ secrets.MONGO_PASS }}
 
         steps:
             - name: Checkout code
@@ -31,6 +31,10 @@ jobs:
                   node-version: 20
             - name: Install dependencies
               run: npm ci 
+
+            - name: Create environment file
+              run: |
+               echo "MONGO_URI=mongodb://${{ secrets.MONGO_USER }}:${{ secrets.MONGO_PASS }}@localhost:27017/" >> .env
 
             - name: Verify app start
               run: npm start
