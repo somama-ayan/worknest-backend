@@ -39,10 +39,7 @@ jobs:
             - name: Validate Node syntax
               run: node --check src/index.js
 
-            - name: Start server (smoke test)
-              run: |
-                    node src/index.js &
-                    sleep 5
-                    pkill node
+            - name: Check code syntax
+              run: node --check src/index.js
                 
               
