@@ -5,10 +5,19 @@ dotenv.config()
 
 const PORT = process.env.PORT || 5000
 
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log("MongoDB connected"))
-  .catch(err => console.log("Mongo error:", err));
+const startServer = async () => {
+  try {
+    await mongoose.connect(process.env.MONGO_URI);
+    console.log("MongoDB connected");
 
-app.listen(5000, () => {
-    console.log(`Server Listening on PORT: ${PORT}`)
-})
+    app.listen(PORT, () => {
+      console.log(`Server Listening on PORT ---: ${PORT}`);
+    });
+
+  } catch (err) {
+    console.error("Mongo error:", err);
+    process.exit(1); // stop app if DB fails
+  }
+};
+
+startServer();
