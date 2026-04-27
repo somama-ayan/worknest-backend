@@ -1,19 +1,54 @@
-import express from 'express'
-import bcrypt from 'bcryptjs'
-import jwt from 'jsonwebtoken'
-import User from '../models/user.model.js'
-export const registerUser = async (data) => {
-    const { fullName , email , password } = data;
+import bcrypt from "bcryptjs"
 
-    const existingUser = await User.findOne({email});
-    if(existingUser) throw new Error('User already Exists.')
-    
-    const hashedPassword = await bcrypt.hash(password, 10)
+import { userValidSchema, loginValidSchema } from "../validations/auth.validation.js";
+import User from "../models/user.model.js"
+import { AppError } from "../utils/AppError.js";
+import { generateToken } from "../utils/generateTokens.js";
 
-    const user = await User.create({
-        fullName,
-        email,
-        hashedPassword
-    })
-    return user
+export const signUpUserService = async (data)  => {
+  const {error , value} = userValidSchema.validate(data);
+  if(error) throw new AppError(error.details[0].message, 422);
+
+  const {fullName, email , password}  = value;
+  const existingUser = await User.findOne({email});
+  if(existingUser) throw new AppError("User Already Exist",409);
+  
+  const salt = await bcrypt.genSalt(10);
+  const hashPassword = await bcrypt.hash(password , salt);
+
+  const user = User.create({
+    fullName, 
+    email,
+     password: hashPassword
+  })
+
+  const token = generateToken(user._id);
+
+  return { user , token };
+
 } 
+
+export const signInUserService = async (data) => {
+  const {error , value} = loginValidSchema.validate(data);
+
+  if(error) throw new AppError(error.details[0].message, 422);
+
+  const { email, password } = value;
+
+  const user = await User.findOne({ email });
+
+  if (!user) {
+    throw new AppError("Invalid email or password", 401);
+  }
+
+  const isMatch = await bcrypt.compare(password, user.password);
+
+  if (!isMatch) {
+    throw new AppError("Invalid email or password", 401);
+  }
+
+  const token = generateToken(user._id);
+
+  return { user, token };
+
+}

@@ -1,3 +1,0 @@
-
-
-router.get("/users", getUsers);
