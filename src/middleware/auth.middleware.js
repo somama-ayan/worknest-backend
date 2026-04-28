@@ -1,24 +1,24 @@
-import jwt from "jsonwebtoken"
+import jwt from "jsonwebtoken";
 
-import User from "../models/user.model.js"
 import { AppError } from "../utils/AppError.js";
+import userModel from "../models/user.model.js";
 
-export const authMiddleware = async (req, res , next) => {
-    try {
-        const token = req.cookies.token;
-        
-        if(!token) throw new AppError("Unauthorized", 401)
-        
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        
-        const user = await User.findById(decoded.id).select("-password")
+export const authMiddleware = async (req, res, next) => {
+  try {
+    token = res.cookie.token;
+    if (!token) throw new AppError("Unauthorized", 401);
 
-        if(!user) throw new AppError("User Not Found.", 404)
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-        req.user = user; 
-        next();
-        
-    } catch (error) {
-        next(error)
-    }
-}
+    const user = userModel.findById(decoded.id);
+    if (!user) throw new AppError("User not Found.", 404);
+
+    req.user = {
+      id: user._id,
+      email: user.email,
+    };
+    next();
+  } catch (error) {
+    next(error);
+  }
+};

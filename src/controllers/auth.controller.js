@@ -1,7 +1,4 @@
-import {
-  signUpUserService,
-  signInUserService,
-} from "../services/auth.service.js";
+import { signInService, signUpService } from "../services/auth.service.js";
 
 const cookieOptions = {
   httpOnly: true,
@@ -10,12 +7,11 @@ const cookieOptions = {
   maxAge: 7 * 24 * 60 * 60 * 1000,
 };
 
-export const signUp = async (req, res, next) => {
+export const signUpController = async (req, res, next) => {
   try {
-    const { user, token } = await signUpUserService(req.body);
+    const { user, token } = await signUpService(req.body);
 
     res.cookie("token", token, cookieOptions);
-
     return res.status(201).json({
       success: true,
       message: "User registered successfully",
@@ -30,35 +26,29 @@ export const signUp = async (req, res, next) => {
   }
 };
 
-export const signIn = async (req, res, next) => {
+export const signInController = async (req, res, next) => {
   try {
-    const { user, token } = await signInUserService(req.body);
+    const { user, token } = await signInService(req.body);
 
     res.cookie("token", token, cookieOptions);
 
     return res.status(200).json({
       success: true,
-      message: "Login successful",
-      data: {
-        id: user._id,
-        fullName: user.fullName,
-        email: user.email,
-      },
+      message: "User Signed In successfully",
     });
   } catch (error) {
     next(error);
   }
 };
 
-export const logout = async (req, res) => {
+export const signOutController = async (req, res, next) => {
   res.clearCookie("token", {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
   });
-
   return res.status(200).json({
     success: true,
-    message: "Logged out successfully",
-  });
+    message: "User Signed Out successfully."
+  })
 };

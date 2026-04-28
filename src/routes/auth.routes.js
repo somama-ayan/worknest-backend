@@ -1,19 +1,10 @@
 import express from "express";
-import { signUp, signIn, logout } from "../controllers/auth.controller.js";
-import { authMiddleware } from "../middleware/auth.middleware.js";
+import { signUpController,  signInController, signOutController } from "../controllers/auth.controller.js";
 
 const router = express.Router();
 
-router.post("/signup", signUp);
-router.post("/signin", signIn);
-router.post("/signout", logout);
-
-// test protected route
-router.get("/me", authMiddleware, (req, res) => {
-  return res.status(200).json({
-    message: "Authorized user",
-    user: req.user,
-  });
-});
+router.post("/signup", signUpController)
+router.post("/signin", signInController)
+router.post("/signout", signOutController)
 
 export default router;
