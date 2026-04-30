@@ -30,4 +30,4 @@ const userModel = new mongoose.Schema(
   },
 );
 
-export default mongoose.model("user", userModel);
+export default mongoose.model("User", userModel);
