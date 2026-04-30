@@ -1,4 +1,6 @@
 import express from "express"
+import dotenv from "dotenv"
+dotenv.config();  
 import cors from "cors"
 import cookieParser from "cookie-parser"
 import rateLimit from "express-rate-limit"
@@ -10,8 +12,9 @@ const app = express();
 
 app.use(express.json({limit: "10kb"}));
 app.use(helmet());
+console.log("CLIENT_URL:", process.env.CLIENT_URL);
 app.use(cors({
-  origin: process.env.CLIENT_URL,
+  origin: "http://localhost:3000",
   credentials: true
 }));
 app.use(rateLimit({
