@@ -5,7 +5,7 @@ import userModel from "../models/user.model.js";
 
 export const authMiddleware = async (req, res, next) => {
   try {
-    const token = res.cookies?.token;
+    const token = req.cookies?.token;
     if (!token) throw new AppError("Unauthorized", 401);
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
