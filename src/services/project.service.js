@@ -24,3 +24,15 @@ export const addNewProjectService = async (data, userID) => {
         })
   return project;
 };
+
+export const getAllProjectsService = async () => {
+    const allProjects = await projectModel.find();
+
+    return allProjects;
+}
+
+export const getSingleProjectsService = async (data) => {
+    const singleProject = await projectModel.findById(data)
+    
+    return singleProject;
+}
