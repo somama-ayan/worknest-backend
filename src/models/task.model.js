@@ -1,4 +1,6 @@
-const taskSchema = new mongoose.Schema({
+import mongoose from "mongoose";
+
+const taskModel = new mongoose.Schema({
   title: {
     type: String,
     required: true,
@@ -19,7 +21,7 @@ const taskSchema = new mongoose.Schema({
   owner: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
-    required: true,
+    // required: true,
   },
   members: [
     {
@@ -38,3 +40,5 @@ const taskSchema = new mongoose.Schema({
     default: "medium",
   },
 }, { timestamps: true });
+
+export default mongoose.model("Tasks", taskModel)
