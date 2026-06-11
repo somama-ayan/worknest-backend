@@ -2,6 +2,8 @@ import {
   addNewProjectService,
   getAllProjectsService,
   getSingleProjectsService,
+  updateProjectService,
+  deleteProjectService
 } from "../services/project.service.js";
 
 export const addNewProjectController = async (req, res, next) => {
@@ -36,7 +38,6 @@ export const projectsController = async (req, res, next) => {
 export const viewSingleProjectController = async (req, res, next) => {
   try {
     const { id } = req.params;
-
     const getSingleProject = await getSingleProjectsService(id);
 
     if (!getSingleProject) {
@@ -54,3 +55,34 @@ export const viewSingleProjectController = async (req, res, next) => {
     next(err);
   }
 };
+
+export const updateProjectController = async (req, res , next) => {
+  
+  try {
+    const { id } = req.params
+    const updatedProject = await updateProjectService(id, req.body)
+
+    return res.status(200).json({
+      success: true,
+      message: "Project Updated successfully",
+      data: updatedProject
+    });
+  } catch (err) {
+    next(err);
+  }
+}
+
+export const deleteProjectController = async (req, res , next) =>{
+  try {
+    const {id} = req.params
+    const data = await deleteProjectService(id);
+
+    res.status(200).json({
+      success: true,
+      message: "Project Delteted Successfully."
+    })
+
+  } catch (err) {
+    next(err)
+  }
+}

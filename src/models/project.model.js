@@ -24,7 +24,7 @@ const projectModel = new mongoose.Schema(
     description: {
       type: String,
       minlength: 5,
-      maxlength: 100,
+      maxlength: 300,
     },
     owner: {
       type: mongoose.Schema.Types.ObjectId,

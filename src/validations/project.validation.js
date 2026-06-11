@@ -14,7 +14,7 @@ export const addNewProjectValidation = Joi.object({
   description: Joi.string()
   .trim()
   .min(5)
-  .max(100)
+  .max(300)
   .required(),
 
   target_completion_date: Joi.date()

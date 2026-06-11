@@ -24,6 +24,11 @@ const userModel = new mongoose.Schema(
       max: 30,
       required: true,
     },
+    role: {
+      type: String,
+      enum:["member", "admin"],
+      default: "member"
+    }
   },
   {
     timestamps: true,
