@@ -16,7 +16,8 @@ app.set('trust proxy', 1)
 app.use(express.json({limit: "10kb"}));
 app.use(helmet());
 app.use(cors({
-  origin: process.env.CLIENT_URL,
+  origin: "http://worknest-frontend-work-nest.app-crc.testing",
+  // origin: process.env.CLIENT_URL,
   credentials: true
 }));
 app.use(rateLimit({
