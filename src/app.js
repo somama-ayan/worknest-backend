@@ -4,6 +4,9 @@ import cookieParser from "cookie-parser"
 import rateLimit from "express-rate-limit"
 import helmet from "helmet"
 
+// for haproxy , 
+app.set('trust proxy', 1)
+
 import authRoutes from "./routes/auth.routes.js"
 import { errorHandler } from "./middleware/error.middleware.js"
 const app = express();
